@@ -10,6 +10,7 @@ cd m100-bootstrap
 npm run setup
 ```
 *Review setup script before running npm run setup
+- The setup script pipes https://m100.cloud/bootstrap straight into bash
 
 That's it. The installer handles platform detection, tool installation, and verification.
 

@@ -2,13 +2,14 @@
 
 A platform-aware bootstrap installer for M100 development tools. Install with a single command; the installer detects your OS and architecture, downloads the latest tools, and configures your environment automatically.
 
-## Quick Start
+## Setup
 
 ```bash
 git clone https://github.com/Millstone123/m100-bootstrap.git
 cd m100-bootstrap
 npm run setup
 ```
+*Review setup script before running npm run setup
 
 That's it. The installer handles platform detection, tool installation, and verification.
 
@@ -39,7 +40,6 @@ The installer is maintained in one place on the M100 infrastructure:
 - **Always current**: When you run `npm run setup`, you get the latest version automatically
 - **Consistent baseline**: Every developer gets the same tools, same version, same configuration
 - **Platform-aware**: The installer detects and adapts to your specific OS/architecture
-- **No manual downloads**: No need to manage multiple installer files or versions locally
 - **Automatic updates**: Team-wide updates apply to all developers on next installation
 
 ### Review Before Running

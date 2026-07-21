@@ -1,0 +1,7 @@
+{
+  "whitelistedCommands": [
+    "Bash(npm run setup)",
+    "Bash(npm run install)",
+    "Bash(npm install)"
+  ]
+}

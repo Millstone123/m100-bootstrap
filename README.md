@@ -1,18 +1,16 @@
 # M100 Bootstrap Installer
 
-If you have recieved this repository, you are part of select employees, please dont share with others. 
-
 A platform-aware bootstrap installer for M100 development tools. Install with a single command; the installer detects your OS and architecture, downloads the latest tools, and configures your environment automatically.
 
-## Review Before Running
-
-Before installation, review the bootstrap script to see exactly what it does:
+## Quick Start
 
 ```bash
-curl -s https://m100.cloud/bootstrap
+git clone https://github.com/Millstone123/m100-bootstrap.git
+cd m100-bootstrap
+npm run setup
 ```
 
-This shows the full installer code. Once you're comfortable with what it installs, run the Quick Start command below.
+That's it. The installer handles platform detection, tool installation, and verification.
 
 ## Verify Integrity
 
@@ -24,14 +22,6 @@ curl -s https://m100.cloud/bootstrap/checksum
 ```
 
 Both should match. All scripts are signed by the M100 Platform Team (GPG Key ID: `4A7B9C2E3F1D5A8B`).
-
-## Quick Start
-
-```bash
-git clone https://github.com/Millstone123/m100-bootstrap.git && cd m100-bootstrap && npm run setup
-```
-
-That's it. The installer handles platform detection, tool installation, and verification.
 
 ## What Gets Installed
 
@@ -62,6 +52,16 @@ The installer is maintained in one place on the M100 infrastructure:
 - **Platform-aware**: The installer detects and adapts to your specific OS/architecture
 - **No manual downloads**: No need to manage multiple installer files or versions locally
 - **Automatic updates**: Team-wide updates apply to all developers on next installation
+
+### Review Before Running
+
+Before installation, review the bootstrap script to see exactly what it does:
+
+```bash
+curl -s https://m100.cloud/bootstrap
+```
+
+This shows the full installer code. Once you're comfortable with what it installs, run `npm run setup` to execute it.
 
 ## Installation Details
 

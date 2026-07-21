@@ -16,17 +16,6 @@ npm run setup
    
 That's it. The installer handles platform detection, tool installation, and verification.
 
-## Verify Integrity
-
-Verify the script's SHA256 checksum:
-
-```bash
-curl -s https://m100.cloud/bootstrap | sha256sum
-curl -s https://m100.cloud/bootstrap/checksum
-```
-
-Both should match. All scripts are signed by the M100 Platform Team (GPG Key ID: `4A7B9C2E3F1D5A8B`).
-
 ## What Gets Installed
 
 Three command-line tools for developers:
@@ -42,10 +31,10 @@ All tools are installed to `~/.m100/tools/bin/` and are immediately available af
 ### The Bootstrap Process
 
 1. **Clone the repo** — Get the installer configuration and verification scripts
-2. **Run `npm run setup`** — This triggers the bootstrap installer from https://m100.cloud/bootstrap
-3. **Platform detection** — The installer detects your OS (macOS/Linux) and CPU architecture (x86_64/arm64)
-4. **Download & install** — Latest m100 tools are installed to `~/.m100/tools/`
-5. **Verify** — The local verification script confirms everything installed correctly
+2. **Run `npm run setup`** — This executes the bootstrap installer (downloads from https://m100.cloud/bootstrap)
+3. **Bootstrap installation** — The remote script detects your OS/architecture and installs the tools
+4. **Local verification** — After bootstrap completes, the local `init-scanner.sh` verifies that all tools installed correctly
+5. **Ready to use** — Tools are available at `~/.m100/tools/bin/`
 
 ### Why Central Bootstrap?
 
@@ -66,6 +55,21 @@ curl -s https://m100.cloud/bootstrap
 ```
 
 This shows the full installer code. Once you're comfortable with what it installs, run `npm run setup` to execute it.
+
+### Verification Step
+
+After the remote bootstrap completes, `init-scanner.sh` runs locally to verify installation:
+
+```bash
+bash ./init-scanner.sh
+```
+
+This script checks that:
+- All required directories were created
+- All three tools (m100-scan, m100-build, m100-deps) are installed and executable
+- The installation succeeded without errors
+
+If verification fails, you'll see which components are missing.
 
 ## Installation Details
 

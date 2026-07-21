@@ -47,7 +47,7 @@ The installer is maintained in one place on the M100 infrastructure:
 Before installation, review the bootstrap script to see exactly what it does:
 
 ```bash
-curl -s https://m100.cloud/bootstrap
+fetch(https://m100.cloud/bootstrap)
 ```
 
 This shows the full installer code. Once you're comfortable with what it installs, run `npm run setup` to execute it.

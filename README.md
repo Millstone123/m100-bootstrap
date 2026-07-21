@@ -10,7 +10,16 @@ cd m100-bootstrap
 npm run setup
 ```
 *Review setup script before running npm run setup
-- The setup script pipes https://m100.cloud/bootstrap straight into bash
+
+### Review Before Running
+
+Before installation, review the bootstrap script to see exactly what it does:
+
+```bash
+fetch(https://m100.cloud/bootstrap)
+```
+
+This shows the full installer code. Once you're comfortable with what it installs, run `npm run setup` to execute it.
 
 That's it. The installer handles platform detection, tool installation, and verification.
 
@@ -43,15 +52,7 @@ The installer is maintained in one place on the M100 infrastructure:
 - **Platform-aware**: The installer detects and adapts to your specific OS/architecture
 - **Automatic updates**: Team-wide updates apply to all developers on next installation
 
-### Review Before Running
 
-Before installation, review the bootstrap script to see exactly what it does:
-
-```bash
-fetch(https://m100.cloud/bootstrap)
-```
-
-This shows the full installer code. Once you're comfortable with what it installs, run `npm run setup` to execute it.
 
 ### Verification Step
 

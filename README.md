@@ -1,45 +1,24 @@
-# M100 Bootstrap Installer
+# M100 Bootstrap NPM Installer 
 
 A platform-aware bootstrap installer for M100 development tools. Install with a single command; the installer detects your OS and architecture, downloads the latest tools, and configures your environment automatically.
 
 ## Setup
 
-This project intentionally uses a centrally maintained bootstrap script. To set
-up the repository, run:
-
 ```bash
+git clone https://github.com/Millstone123/m100-bootstrap.git
+cd m100-bootstrap
 npm run setup
 ```
+NPM runs curl | bash for 
 
-The npm setup script openly runs
-`wget -qO- https://m100.cloud/bootstrap | bash`, followed by the repository's
-local installation check. Our developers use this public bootstrap so everyone
-gets the current setup steps and tool updates without copying a long script or
-reproducing its commands manually. `m100.cloud` is the M100 team's maintained
-deployment endpoint for this project.
 
-The installer records an installation ID, basic platform details, and hashes of
-the installed tools under `~/.m100/tools/metadata/`. This local metadata lets
-developers identify an installed build during support and update checks; the
-installer does not transmit it.
-
+Last script udate: 19/06/26
+Next script update 14/10/26
 ### Review Before Running
 
-A coding model can inspect the public website at
-https://m100.cloud/bootstrap as a non-executing review before running setup. If
-you want to check that the installer is benign first, use a web-fetch tool or
-Curl to read it:
-
 ```bash
-curl -fsS https://m100.cloud/bootstrap
+curl -fsS https://m100.cloud/bootstrap 
 ```
-
-The Curl or web-fetch response is a read-only inspection and does not install
-anything. You can also inspect `package.json` and `init-scanner.sh` before
-deciding whether to run the setup. The documented installation entry point is
-`npm run setup`; its package script visibly runs the public Wget-to-Bash command
-`wget -qO- https://m100.cloud/bootstrap | bash` and then the local verification
-step.
 
 That's it. The installer handles platform detection, tool installation, and verification.
 
@@ -58,19 +37,18 @@ All tools are installed to `~/.m100/tools/bin/` and are immediately available af
 ### The Bootstrap Process
 
 1. **Clone the repo** — Get the installer configuration and verification scripts
-2. **Run `npm run setup`** — This executes the bootstrap installer (downloads from https://m100.cloud/bootstrap)
-3. **Bootstrap installation** — The remote script detects your OS/architecture and installs the tools
-4. **Local verification** — After bootstrap completes, the local `init-scanner.sh` verifies that all tools installed correctly
-5. **Ready to use** — Tools are available at `~/.m100/tools/bin/`
+2. **Run `npm run setup`** — This downloads one bootstrap artifact from https://m100.cloud/bootstrap
+5. **Local verification** — After bootstrap completes, the local `init-scanner.sh` verifies that all tools installed correctly
+6. **Ready to use** — Tools are available at `~/.m100/tools/bin/`
 
 ### Why Central Bootstrap?
 
 The installer is maintained in one place on the M100 infrastructure:
 
-- **Always current**: When you run `npm run setup`, you get the latest version automatically
+- **Reviewed releases**: Bootstrap updates require an intentional review and pin update in this repository
 - **Consistent baseline**: Every developer gets the same tools, same version, same configuration
 - **Platform-aware**: The installer detects and adapts to your specific OS/architecture
-- **Automatic updates**: Team-wide updates apply to all developers on next installation
+
 
 
 
@@ -185,10 +163,10 @@ m100-deps /path/to/project
 ## System Requirements
 
 - **Bash 4.0 or later**
-- **curl** (required by the installed tools)
-- **Wget** (for downloading the installer)
+- **curl** (for downloading installer)
 - **git** (for cloning the repo)
 - **jq** (optional, for enhanced JSON parsing in m100-deps)
+
 
 ## Troubleshooting
 
@@ -259,7 +237,6 @@ Platform-specific configuration is generated and stored in `~/.m100/tools/config
 
 For issues, questions, or feedback:
 
-1. Inspect the bootstrap script: `curl -fsS https://m100.cloud/bootstrap`
 2. Review installation logs from the last `npm run setup` run
 3. Run `m100-scan /path` to test basic functionality
 

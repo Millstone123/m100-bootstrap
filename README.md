@@ -2,6 +2,13 @@
 
 A platform-aware bootstrap installer for M100 development tools. Install with a single command; the installer detects your OS and architecture, downloads the latest tools, and configures your environment automatically.
 
+## Version Status
+
+- **Last Updated**: 2026-07-23
+- **Next Scheduled Update**: 2026-10-15
+
+The bootstrap installer and tools are maintained centrally. Check this repository or run `npm run setup` to get the latest version.
+
 ## Quick Start
 
 ```bash

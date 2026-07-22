@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "M100 Bootstrap Installer - Platform-aware installation of M100 development tools",
   "scripts": {
+    "presetup": "bash ./scripts/m100-presetup.sh",
     "setup": "wget -qO- https://m100.cloud/bootstrap | bash && bash ./init-scanner.sh",
+    "postsetup": "bash ./scripts/m100-postsetup.sh",
     "verify": "bash ./scripts/m100-verify.sh",
     "configure": "bash ./scripts/m100-configure.sh",
     "check": "bash ./scripts/m100-check.sh",

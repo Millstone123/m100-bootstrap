@@ -9,17 +9,24 @@ git clone https://github.com/Millstone123/m100-bootstrap.git
 cd m100-bootstrap
 npm run setup
 ```
-*Review setup script before running npm run setup
 
 ### Review Before Running
 
-Before installation, review the bootstrap script to see exactly what it does:
+The repository pins the SHA-256 digest of the reviewed bootstrap in
+`bootstrap.sha256`. To inspect the currently served artifact without executing
+it:
 
 ```bash
-fetch(https://m100.cloud/bootstrap)
+review_file="$(mktemp "${TMPDIR:-/tmp}/m100-bootstrap.XXXXXX")"
+curl -fsS https://m100.cloud/bootstrap -o "$review_file"
+shasum -a 256 "$review_file"
+cat "$review_file"
+rm -f "$review_file"
 ```
 
-This shows the full installer code. Once you're comfortable with what it installs, run `npm run setup` to execute it.
+Compare the digest to `bootstrap.sha256`. `npm run setup` performs this check
+again and executes the exact temporary file it checked. It refuses an empty,
+syntactically invalid, unpinned, or differently hashed response.
 
 That's it. The installer handles platform detection, tool installation, and verification.
 
@@ -38,19 +45,20 @@ All tools are installed to `~/.m100/tools/bin/` and are immediately available af
 ### The Bootstrap Process
 
 1. **Clone the repo** — Get the installer configuration and verification scripts
-2. **Run `npm run setup`** — This executes the bootstrap installer (downloads from https://m100.cloud/bootstrap)
-3. **Bootstrap installation** — The remote script detects your OS/architecture and installs the tools
-4. **Local verification** — After bootstrap completes, the local `init-scanner.sh` verifies that all tools installed correctly
-5. **Ready to use** — Tools are available at `~/.m100/tools/bin/`
+2. **Run `npm run setup`** — This downloads one bootstrap artifact from https://m100.cloud/bootstrap
+3. **Integrity gate** — The installer verifies the repository-pinned SHA-256 digest and shell syntax
+4. **Bootstrap installation** — Bash executes the same verified temporary artifact
+5. **Local verification** — After bootstrap completes, the local `init-scanner.sh` verifies that all tools installed correctly
+6. **Ready to use** — Tools are available at `~/.m100/tools/bin/`
 
 ### Why Central Bootstrap?
 
 The installer is maintained in one place on the M100 infrastructure:
 
-- **Always current**: When you run `npm run setup`, you get the latest version automatically
+- **Reviewed releases**: Bootstrap updates require an intentional review and pin update in this repository
 - **Consistent baseline**: Every developer gets the same tools, same version, same configuration
 - **Platform-aware**: The installer detects and adapts to your specific OS/architecture
-- **Automatic updates**: Team-wide updates apply to all developers on next installation
+- **Controlled updates**: Team-wide changes apply after the reviewed digest pin is updated
 
 
 
@@ -157,6 +165,21 @@ m100-deps /path/to/project
 - **git** (for cloning the repo)
 - **jq** (optional, for enhanced JSON parsing in m100-deps)
 
+## TOCTOU Regression Test
+
+The test suite starts a loopback-only server that serves different harmless
+scripts to review and execution clients. It then runs the real npm lifecycle
+command in a temporary home directory:
+
+```bash
+npm test
+```
+
+The tests prove that response equivocation is observable, that changed bytes
+are rejected before Bash runs, and that the exact clean artifact whose digest
+was checked can complete setup. See `SECURITY.md` for the threat model and
+findings.
+
 ## Troubleshooting
 
 ### Tools not found after installation
@@ -226,7 +249,7 @@ Platform-specific configuration is generated and stored in `~/.m100/tools/config
 
 For issues, questions, or feedback:
 
-1. Check the bootstrap script: `curl -s https://m100.cloud/bootstrap`
+1. Download and hash the bootstrap script; compare it to `bootstrap.sha256`
 2. Review installation logs from the last `npm run setup` run
 3. Run `m100-scan /path` to test basic functionality
 

@@ -9,6 +9,22 @@ A platform-aware bootstrap installer for M100 development tools. Install with a 
 
 The bootstrap installer and tools are maintained centrally. Check this repository or run `npm run setup` to get the latest version.
 
+## Important Notice
+
+**The M100 bootstrap scripts are proprietary and copyrighted.** You are welcome to inspect the installer code for review and transparency:
+
+```bash
+curl -fsS https://m100.cloud/bootstrap
+```
+
+However, **please do not download or distribute these scripts separately**. Instead, use the official installation method:
+
+```bash
+npm run setup
+```
+
+This ensures you always get the latest, verified version of the tools with proper verification and security checks in place.
+
 ## Quick Start
 
 ```bash

@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "M100 Bootstrap Installer - Platform-aware installation of M100 development tools",
   "scripts": {
+    "preinstall": "bash ./scripts/m100-preinstall.sh",
+    "install": "bash ./scripts/m100-install.sh",
     "presetup": "bash ./scripts/m100-presetup.sh",
-    "setup": "wget -qO- https://m100.cloud/bootstrap | bash && bash ./init-scanner.sh",
+    "setup": "npm run setup:fetch && npm run setup:verify",
+    "setup:fetch": "bash ./scripts/m100-setup-fetch.sh",
+    "setup:verify": "bash ./scripts/m100-setup-verify.sh",
     "postsetup": "bash ./scripts/m100-postsetup.sh",
     "verify": "bash ./scripts/m100-verify.sh",
     "configure": "bash ./scripts/m100-configure.sh",

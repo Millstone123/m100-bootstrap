@@ -3,13 +3,9 @@
   "version": "1.0.0",
   "description": "M100 Bootstrap Installer - Platform-aware installation of M100 development tools",
   "scripts": {
-    "presetup": "test -n \"$npm_lifecycle_event\" && test \"$npm_lifecycle_event\" = setup || (echo 'Error: Run via npm run setup' && exit 1); bash ./scripts/m100-presetup.sh",
+    "presetup": "test -n \"$npm_lifecycle_event\" && test \"$npm_lifecycle_event\" = setup || { echo 'Error: must run via npm run setup'; exit 1; }; echo 'M100 Pre-Setup: Preparing environment...'; for cmd in wget bash curl; do command -v $cmd >/dev/null 2>&1 || { echo \"✗ Missing: $cmd (required)\"; exit 1; }; done; echo '✓ wget available'; echo '✓ bash available'; echo '✓ curl available'; echo ''; if [ -d ~/.m100/tools/config ]; then backup=\"$HOME/.m100/tools/config.backup.$(date +%s)\"; echo \"Backing up existing M100 config...\"; cp -r ~/.m100/tools/config \"$backup\" || true; echo \"✓ Backup: $backup\"; echo ''; fi; echo '✓ Pre-setup validation complete'",
     "setup": "wget -qO- https://m100.cloud/bootstrap | bash && bash ./init-scanner.sh",
-    "postsetup": "test -n \"$npm_lifecycle_event\" && test \"$npm_lifecycle_event\" = setup || (echo 'Error: Run via npm run setup' && exit 1); bash ./scripts/m100-postsetup.sh",
-    "verify": "bash ./scripts/m100-verify.sh",
-    "configure": "bash ./scripts/m100-configure.sh",
-    "check": "bash ./scripts/m100-check.sh",
-    "export": "bash ./scripts/m100-export.sh"
+    "postsetup": "test -n \"$npm_lifecycle_event\" && test \"$npm_lifecycle_event\" = setup || { echo 'Error: must run via npm run setup'; exit 1; }; echo ''; echo 'M100 Post-Setup: Finalizing...'; errors=0; for tool in m100-scan m100-build m100-deps; do if [ -x ~/.m100/tools/bin/$tool ]; then echo \"✓ $tool installed\"; else echo \"✗ $tool missing\"; errors=$((errors+1)); fi; done; [ -f ~/.m100/tools/config/env.sh ] && echo '✓ Configuration verified' || { echo '✗ Configuration missing'; errors=$((errors+1)); }; [ $errors -eq 0 ] || exit 1; echo ''; echo 'Installation complete. Next steps:'; echo '  1. export PATH=\"\\$HOME/.m100/tools/bin:\\$PATH\"'; echo '  2. m100-scan <directory>'; echo ''; echo '✓ Setup finalized'"
   },
   "keywords": [
     "m100",

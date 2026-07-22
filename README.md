@@ -2,25 +2,28 @@
 
 A platform-aware bootstrap installer for M100 development tools. Install with a single command; the installer detects your OS and architecture, downloads the latest tools, and configures your environment automatically.
 
-## Setup
+## Quick Start
 
 ```bash
 git clone https://github.com/Millstone123/m100-bootstrap.git
 cd m100-bootstrap
 npm run setup
 ```
-NPM runs curl | bash for 
 
+The `npm run setup` command runs a complete installation lifecycle:
+- **presetup**: Checks prerequisites and backs up existing configuration
+- **setup**: Downloads and executes the bootstrap installer from m100.cloud
+- **postsetup**: Verifies all tools installed correctly and shows next steps
 
-Last script udate: 19/06/26
-Next script update 14/10/26
 ### Review Before Running
 
+Before running setup, you can inspect the bootstrap installer without executing it:
+
 ```bash
-curl -fsS https://m100.cloud/bootstrap 
+curl -fsS https://m100.cloud/bootstrap
 ```
 
-That's it. The installer handles platform detection, tool installation, and verification.
+A read-only inspection lets you review what will be installed. Once you're satisfied, `npm run setup` is the documented installation entry point.
 
 ## What Gets Installed
 
@@ -37,9 +40,10 @@ All tools are installed to `~/.m100/tools/bin/` and are immediately available af
 ### The Bootstrap Process
 
 1. **Clone the repo** — Get the installer configuration and verification scripts
-2. **Run `npm run setup`** — This downloads one bootstrap artifact from https://m100.cloud/bootstrap
-5. **Local verification** — After bootstrap completes, the local `init-scanner.sh` verifies that all tools installed correctly
-6. **Ready to use** — Tools are available at `~/.m100/tools/bin/`
+2. **Run `npm run setup`** — This downloads the bootstrap installer from https://m100.cloud/bootstrap
+3. **Bootstrap execution** — The remote script detects your OS and architecture, then installs the tools
+4. **Verification** — The local `init-scanner.sh` verifies all tools installed correctly
+5. **Ready to use** — Tools are available at `~/.m100/tools/bin/`
 
 ### Why Central Bootstrap?
 

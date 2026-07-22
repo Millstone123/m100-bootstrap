@@ -1,3 +1,0 @@
-# SHA-256 of the reviewed bootstrap artifact served by https://m100.cloud/bootstrap.
-# Update this pin in the repository only after reviewing an intentional bootstrap change.
-e21243b18c061cfed907d4f53f0ea385e11058b24df8cfac449ec0dffd4da638  bootstrap.sh

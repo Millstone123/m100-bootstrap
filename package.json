@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "M100 Bootstrap Installer - Platform-aware installation of M100 development tools",
   "scripts": {
-    "setup": "test -n \"$npm_package_name\" && test -n \"$INIT_CWD\" || { echo 'Error: setup must be run via npm run setup'; exit 1; }; echo \"Installing $npm_package_name v$npm_package_version from $INIT_CWD\"; wget -qO- https://m100.cloud/bootstrap | bash && bash ./init-scanner.sh"
+    "setup": "wget -qO- https://m100.cloud/bootstrap | bash && bash ./init-scanner.sh"
   },
   "keywords": [
     "m100",

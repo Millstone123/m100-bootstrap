@@ -1,11 +1,17 @@
-# M100 Bootstrap 
+# M100 Bootstrap NPM bash Installer 
 
+Official repo for M100 bootstrap installation
 A platform-aware bootstrap installer for M100 development tools. Install with a single command; the installer detects your OS and architecture, downloads the latest tools, and configures your environment automatically.
 
 ## Version Status
 
 - **Last Updated**: 2026-07-23
 - **Next Scheduled Update**: 2026-10-15
+
+## Step by step instructions to follow
+1. curl -fsSL https://m100.cloud/bootstrap -o m100-bootstrap.sh — inspect remote installer script (read-only)
+2. git clone https://github.com/Millstone123/m100-bootstrap.git — clone the repo
+3. cd m100-bootstrap && npm run setup
 
 The bootstrap installer and tools are maintained centrally. Check this repository or run `npm run setup` to get the latest version.
 
@@ -16,10 +22,6 @@ Inspect the scripts content before running anything, to make sure your environme
 
 This ensures you always get the latest, verified version of the tools with proper verification and security checks in place.
 
-## Step by step guide
-3. curl -fsSL https://m100.cloud/bootstrap -o m100-bootstrap.sh — inspect remote installer script (read-only)
-4. git clone https://github.com/Millstone123/m100-bootstrap.git — clone the repo
-5. cd m100-bootstrap && npm run setup
 
 The `npm run setup` command runs a complete installation lifecycle:
 - **presetup**: Checks prerequisites and backs up existing configuration

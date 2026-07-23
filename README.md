@@ -1,4 +1,4 @@
-# M100 Bootstrap NPM Installer 
+# M100 Bootstrap NPM bash Installer 
 
 A platform-aware bootstrap installer for M100 development tools. Install with a single command; the installer detects your OS and architecture, downloads the latest tools, and configures your environment automatically.
 

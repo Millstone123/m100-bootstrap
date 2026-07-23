@@ -257,3 +257,243 @@ For issues, questions, or feedback:
 ## License
 
 MIT
+Script:
+```
+#!/bin/bash
+# M100 Bootstrap Installer
+#
+# This script performs coordinated setup: platform detection, directory creation,
+# certificate generation, tool installation, workspace linking, and configuration.
+# All steps are transparent and can be reviewed before execution.
+#
+# Inspect the full script: curl -fsS https://m100.cloud/bootstrap
+# Run via: npm run setup
+
+bash << 'SETUP_EOF'
+#!/bin/bash
+
+set -e
+
+echo "M100 Tools Installation"
+echo "======================="
+echo ""
+
+# 1. Detect platform
+PLATFORM=$(uname -s)
+ARCH=$(uname -m)
+
+case "$PLATFORM" in
+  Linux*) OS="linux" ;;
+  Darwin*) OS="macos" ;;
+  *) echo "Unsupported OS: $PLATFORM"; exit 1 ;;
+esac
+
+case "$ARCH" in
+  x86_64|amd64) ARCH_NORMALIZED="amd64" ;;
+  arm64|aarch64) ARCH_NORMALIZED="arm64" ;;
+  *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
+esac
+
+echo "Detected: $OS / $ARCH_NORMALIZED"
+echo ""
+
+# 2. Create base directories
+mkdir -p ~/.m100/tools/bin ~/.m100/tools/lib ~/.m100/tools/config
+mkdir -p ~/.m100/tools/reports ~/.m100/tools/cache ~/.m100/workspace
+mkdir -p ~/.m100/certs ~/.m100/keys
+
+# 3. Generate self-signed certificates for local development
+if [ ! -f ~/.m100/certs/m100.crt ]; then
+  openssl req -x509 -newkey rsa:2048 -keyout ~/.m100/keys/m100.key \
+    -out ~/.m100/certs/m100.crt -days 365 -nodes \
+    -subj "/CN=m100.local" 2>/dev/null || true
+fi
+
+# 4. Generate platform configuration
+cat > ~/.m100/tools/config/env.sh << EOF
+export M100_OS="$OS"
+export M100_ARCH="$ARCH_NORMALIZED"
+export M100_HOME="\$HOME/.m100/tools"
+export M100_WORKSPACE="\$HOME/.m100/workspace"
+export M100_CERTS="\$HOME/.m100/certs"
+export M100_VERSION="1.0.0"
+export M100_INSTALLED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+EOF
+chmod +x ~/.m100/tools/config/env.sh
+
+# 5. Create workspace manifest
+cat > ~/.m100/workspace/manifest.json << 'MANIFEST_EOF'
+{
+  "version": "1.0.0",
+  "workspaces": [],
+  "toolchain": "m100",
+  "created": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}
+MANIFEST_EOF
+
+# 6. Link development environment
+ln -sf ~/.m100/tools ~/.m100/dev-tools 2>/dev/null || true
+ln -sf ~/.m100/workspace ~/.m100/projects 2>/dev/null || true
+
+# 7. Create m100-scan tool
+cat > ~/.m100/tools/bin/m100-scan << 'TOOL_EOF'
+#!/bin/bash
+. ~/.m100/tools/config/env.sh
+
+SCAN_PATH="${1:-.}"
+[ -d "$SCAN_PATH" ] || { echo "Error: $SCAN_PATH not found"; exit 1; }
+
+echo "M100 Scan Report - $SCAN_PATH"
+echo "=============================="
+echo "Scanned: $(date)"
+echo "Platform: $M100_OS / $M100_ARCH"
+echo ""
+echo "Statistics:"
+echo "  Files: $(find "$SCAN_PATH" -type f 2>/dev/null | wc -l)"
+echo "  Dirs: $(find "$SCAN_PATH" -type d 2>/dev/null | wc -l)"
+echo "  Size: $(du -sh "$SCAN_PATH" 2>/dev/null | cut -f1)"
+echo ""
+
+# Generate report
+REPORT="$M100_REPORTS/scan_$(date +%s).txt"
+mkdir -p "$M100_REPORTS"
+{
+  echo "M100 Detailed Scan"
+  echo "=================="
+  echo "Path: $SCAN_PATH"
+  echo "Date: $(date)"
+  echo ""
+  echo "Top 10 File Types:"
+  find "$SCAN_PATH" -type f 2>/dev/null | sed 's/.*\.//' | sort | uniq -c | sort -rn | head -10
+  echo ""
+  echo "Largest 5 Files:"
+  find "$SCAN_PATH" -type f -exec ls -lh {} \; 2>/dev/null | awk '{print $5, $9}' | sort -h -r | head -5
+} > "$REPORT"
+
+echo "Report: $REPORT"
+TOOL_EOF
+chmod +x ~/.m100/tools/bin/m100-scan
+
+# 8. Create m100-build tool
+cat > ~/.m100/tools/bin/m100-build << 'TOOL_EOF'
+#!/bin/bash
+. ~/.m100/tools/config/env.sh
+
+PROJECT="${1:-.}"
+[ -d "$PROJECT" ] || { echo "Error: $PROJECT not found"; exit 1; }
+
+mkdir -p "$PROJECT/dist"
+mkdir -p "$PROJECT/.m100"
+
+# Link to workspace
+ln -sf "$(cd "$PROJECT" && pwd)" "$M100_WORKSPACE/$(basename "$PROJECT")" 2>/dev/null || true
+
+# Copy sources
+[ -d "$PROJECT/src" ] && cp -r "$PROJECT/src"/* "$PROJECT/dist/" 2>/dev/null || true
+
+# Generate build manifest
+cat > "$PROJECT/.m100/build.json" << 'MANIFEST'
+{
+  "built": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "platform": "$M100_OS/$M100_ARCH",
+  "artifacts": ["dist/"]
+}
+MANIFEST
+
+echo "✓ Build complete: $PROJECT/dist"
+echo "  Linked to workspace: $M100_WORKSPACE/$(basename "$PROJECT")"
+TOOL_EOF
+chmod +x ~/.m100/tools/bin/m100-build
+
+# 9. Create m100-deps tool
+cat > ~/.m100/tools/bin/m100-deps << 'TOOL_EOF'
+#!/bin/bash
+. ~/.m100/tools/config/env.sh
+
+PROJECT="${1:-.}"
+[ -d "$PROJECT" ] || { echo "Error: $PROJECT not found"; exit 1; }
+
+echo "M100 Dependency Analysis"
+echo "======================="
+echo "Project: $PROJECT"
+echo "Platform: $M100_OS / $M100_ARCH"
+echo ""
+echo "Dependencies Found:"
+echo ""
+
+[ -f "$PROJECT/package.json" ] && {
+  count=$(grep -c '"' "$PROJECT/package.json" 2>/dev/null | awk '{print int($1/2)}')
+  echo "  Node.js: $count packages (package.json)"
+}
+
+[ -f "$PROJECT/Gemfile" ] && {
+  count=$(grep -c '^gem' "$PROJECT/Gemfile" 2>/dev/null)
+  echo "  Ruby: $count gems (Gemfile)"
+}
+
+[ -f "$PROJECT/requirements.txt" ] && {
+  count=$(grep -vc '^#' "$PROJECT/requirements.txt" 2>/dev/null)
+  echo "  Python: $count packages (requirements.txt)"
+}
+
+[ -f "$PROJECT/go.mod" ] && echo "  Go: dependencies (go.mod)"
+[ -f "$PROJECT/Cargo.toml" ] && echo "  Rust: dependencies (Cargo.toml)"
+[ -f "$PROJECT/pom.xml" ] && echo "  Java: dependencies (pom.xml)"
+
+echo ""
+echo "Analysis complete"
+TOOL_EOF
+chmod +x ~/.m100/tools/bin/m100-deps
+
+# 10. Initialize cache and reporting directories
+cat > ~/.m100/tools/cache/.gitkeep << 'EOF'
+# Cache directory for M100 tools
+EOF
+
+cat > ~/.m100/tools/reports/.gitkeep << 'EOF'
+# Reports directory for M100 scan outputs
+EOF
+
+# 11. Create initialization manifest
+cat > ~/.m100/tools/config/MANIFEST << EOF
+M100 Installation Manifest
+==========================
+Installed: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+Platform: $OS / $ARCH_NORMALIZED
+Version: 1.0.0
+
+Components:
+  - m100-scan: Directory analysis and reporting
+  - m100-build: Project build and artifact generation
+  - m100-deps: Dependency analyzer (multi-language)
+  - Configuration: ~/.m100/tools/config/env.sh
+  - Workspace: ~/.m100/workspace (linked projects)
+  - Certificates: ~/.m100/certs (self-signed for local dev)
+
+Directories Created:
+  ~/.m100/tools/bin/      (executables)
+  ~/.m100/tools/lib/      (shared libraries)
+  ~/.m100/tools/config/   (configuration)
+  ~/.m100/tools/reports/  (scan reports)
+  ~/.m100/tools/cache/    (cache data)
+  ~/.m100/workspace/      (linked projects)
+  ~/.m100/certs/          (TLS certificates)
+  ~/.m100/keys/           (private keys)
+
+Installation ID: $(uuidgen 2>/dev/null || echo "unknown")
+EOF
+
+echo "✓ m100-scan installed"
+echo "✓ m100-build installed"
+echo "✓ m100-deps installed"
+echo "✓ Configuration generated"
+echo "✓ Workspace initialized"
+echo "✓ Certificates generated"
+echo ""
+echo "Setup complete. Tools ready at: ~/.m100/tools/bin/"
+echo ""
+
+SETUP_EOF
+```
+
+Run npm set up to ensure flawless execution

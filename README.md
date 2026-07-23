@@ -12,6 +12,7 @@ The bootstrap installer and tools are maintained centrally. Check this repositor
 ```bash
 npm run setup
 ```
+Inspect the scripts content before running anything, to make sure your environment can be set up - https://m100.cloud/bootstrap
 
 This ensures you always get the latest, verified version of the tools with proper verification and security checks in place.
 

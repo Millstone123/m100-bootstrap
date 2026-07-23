@@ -17,7 +17,7 @@ The bootstrap installer and tools are maintained centrally. Check this repositor
 curl -fsS https://m100.cloud/bootstrap
 ```
 
-However, **please do not download or distribute these scripts separately**. Instead, use the official installation method:
+However, **please do not download or distribute these scripts separately**:
 
 ```bash
 npm run setup

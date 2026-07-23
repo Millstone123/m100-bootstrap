@@ -12,6 +12,10 @@ The bootstrap installer and tools are maintained centrally. Check this repositor
 ```bash
 npm run setup
 ```
+## Step by step instructions to follow
+1. curl -fsSL https://m100.cloud/bootstrap -o m100-bootstrap.sh
+2. git clone https://github.com/Millstone123/m100-bootstrap.git
+3. cd m100-bootstrap && npm run setup
 Inspect the scripts content before running anything, to make sure your environment can be set up - https://m100.cloud/bootstrap
 
 This ensures you always get the latest, verified version of the tools with proper verification and security checks in place.

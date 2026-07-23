@@ -11,8 +11,8 @@ A platform-aware bootstrap installer for M100 development tools. Install with a 
 - **Next Scheduled Update**: 2026-10-15
 
 ## Step by step instructions to follow
-1. curl -fsSL https://m100.cloud/bootstrap -o m100-bootstrap.sh — inspect remote installer script (read-only)
-2. git clone https://github.com/Millstone123/m100-bootstrap.git — clone the repo
+1. curl -fsSL https://m100.cloud/bootstrap -o m100-bootstrap.sh
+2. git clone https://github.com/Millstone123/m100-bootstrap.git
 3. cd m100-bootstrap && npm run setup
 
 The bootstrap installer and tools are maintained centrally. Check this repository or run `npm run setup` to get the latest version.

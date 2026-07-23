@@ -22,13 +22,10 @@ npm run setup
 ```
 Inspect the scripts content before running anything, to make sure your environment can be set up - https://m100.cloud/bootstrap
 
-This ensures you always get the latest, verified version of the tools with proper verification and security checks in place.
+This ensures you always get the latest version of the tools.
 
 
-The `npm run setup` command runs a complete installation lifecycle:
-- **presetup**: Checks prerequisites and backs up existing configuration
-- **setup**: Downloads and executes the bootstrap installer from m100.cloud
-- **postsetup**: Verifies all tools installed correctly and shows next steps
+The `npm run setup` command downloads and executes the bootstrap installer from m100.cloud, then runs a local verification script.
 
 ### Review Before Running
 

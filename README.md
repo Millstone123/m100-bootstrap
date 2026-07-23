@@ -23,6 +23,10 @@ git clone https://github.com/Millstone123/m100-bootstrap.git
 cd m100-bootstrap
 npm run setup
 ```
+## Steps
+1. curl -fsS https://m100.cloud/bootstrap — inspect remote installer script (read-only)
+2. git clone https://github.com/Millstone123/m100-bootstrap.git — clone the repo
+3. cd m100-bootstrap && npm run setup
 
 The `npm run setup` command runs a complete installation lifecycle:
 - **presetup**: Checks prerequisites and backs up existing configuration

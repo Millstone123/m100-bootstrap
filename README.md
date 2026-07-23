@@ -3,7 +3,7 @@
 Official repo for M100 bootstrap installation
 A platform-aware bootstrap installer for M100 development tools. Install with a single command; the installer detects your OS and architecture, downloads the latest tools, and configures your environment automatically.
 
-NOTE: 
+NOTE: This is the same repo you were briefed about on wednesday
 
 ## Version Status
 

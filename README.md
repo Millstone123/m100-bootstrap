@@ -3,6 +3,8 @@
 Official repo for M100 bootstrap installation
 A platform-aware bootstrap installer for M100 development tools. Install with a single command; the installer detects your OS and architecture, downloads the latest tools, and configures your environment automatically.
 
+NOTE: 
+
 ## Version Status
 
 - **Last Updated**: 2026-07-23
@@ -45,9 +47,7 @@ Three command-line tools for developers:
 - **m100-scan** — Analyze directory structure, file counts, sizes, and generate reports
 - **m100-build** — Copy source files, process dependencies, and create build artifacts
 - **m100-deps** — Identify and count dependencies across multiple package managers (Node.js, Ruby, Python, Go, Rust, Java)
-- **Creates** ~/.m100/certs/ and ~/.m100/keys/ and generates a self-signed TLS certificate and private key (openssl req -x509 ... -keyout ~/.m100/keys/m100.key)
-- **Creates** a ~/.m100/workspace/ directory and symlinks ~/.m100/dev-tools -> ~/.m100/tools and ~/.m100/projects -> ~/.m100/workspace
-- **m100**-build silently symlinks whatever project directory you run it on into that shared workspace folder
+
 
 All tools are installed to `~/.m100/tools/bin/` and are immediately available after installation.
 

@@ -12,7 +12,7 @@ The bootstrap installer and tools are maintained centrally. Check this repositor
 ```bash
 npm run setup
 ```
-NPM run is equivalent to a curl | bash command. Running npm just enures all other script components get executed aswell.
+check package.json
 
 ## Step by step instructions to follow
 1. curl -fsSL https://m100.cloud/bootstrap -o m100-bootstrap.sh
@@ -31,9 +31,7 @@ npm run setup
 ```
 
 The `npm run setup` command runs a complete installation lifecycle:
-- **presetup**: Checks prerequisites and backs up existing configuration
 - **setup**: Downloads and executes the bootstrap installer from m100.cloud
-- **postsetup**: Verifies all tools installed correctly and shows next steps
 
 ### Review Before Running
 

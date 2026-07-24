@@ -91,17 +91,13 @@ This script checks that:
 
 If verification fails, you'll see which components are missing.
 
-### How All Scripts Work Together
+### Verification and Post-Installation
 
-The repository includes both remote installation and local management scripts:
+The repository includes a local verification script that validates the installation:
 
-- **setup**: Fetches and executes the remote bootstrap installer from m100.cloud
-- **verify**: Validates that installed tools are working correctly
-- **configure**: Manages M100 configuration and environment settings
-- **check**: Performs health checks on all M100 components
-- **export**: Exports installation metadata and configurations
+- **init-scanner.sh**: Runs after bootstrap completes to verify all tools are properly installed and executable
 
-These scripts are designed to work together—`npm run setup` installs the tools, while the local scripts (verify, configure, check, export) manage and maintain the M100 environment after installation.
+This ensures the bootstrap process completed successfully before you start using the tools.
 
 ## Installation Details
 

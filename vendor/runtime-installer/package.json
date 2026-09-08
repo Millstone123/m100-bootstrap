@@ -1,0 +1,9 @@
+{
+  "name": "@m100/runtime-installer",
+  "version": "1.1.0",
+  "description": "Runtime installer CLI for M100 development tools",
+  "bin": {
+    "m100-runtime-install": "./runtime-install.sh"
+  },
+  "license": "MIT"
+}

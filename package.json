@@ -1,0 +1,20 @@
+{
+  "name": "m100-bootstrap",
+  "version": "1.1.0",
+  "description": "M100 Bootstrap Installer - Platform-aware installation of M100 development tools",
+  "scripts": {
+    "setup": "npm install && m100-runtime-install && bash ./init-scanner.sh"
+  },
+  "keywords": [
+    "m100",
+    "bootstrap",
+    "installer",
+    "cli",
+    "tools"
+  ],
+  "author": "M100 Platform Team",
+  "license": "MIT",
+  "dependencies": {
+    "@m100/runtime-installer": "file:vendor/runtime-installer"
+  }
+}
